@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VisioWeb — Sites e Apps que vendem por você</title>
+  <meta name="description" content="Landing pages, e-commerce e apps sob medida para pequenos negócios. Hospedagem e manutenção inclusas." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            vwBlue: '#0EA5FF',
+            vwIndigo: '#6366F1',
+            vwPink: '#EC4899'
+          },
+          fontFamily: {
+            sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica Neue','Arial']
+          },
+          boxShadow: { soft: '0 10px 30px rgba(0,0,0,.12)' }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    .vw-gradient{
+      background: radial-gradient(1200px circle at 10% 10%, rgba(255,255,255,.08), transparent 40%),
+                  linear-gradient(135deg,#0EA5FF 0%,#6366F1 50%,#EC4899 100%);
+    }
+    .glass{ backdrop-filter: blur(10px); background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); }
+    [x-cloak]{display:none!important}
+  </style>
+</head>
+<body class="font-sans text-white antialiased bg-slate-900 selection:bg-vwPink/40">
+
+  <!-- HERO -->
+  <header class="vw-gradient">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-20">
+      <nav class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <img src="assets/logo.png" alt="VisioWeb" class="h-10 w-10 object-contain rounded-md" />
+          <span class="text-xl font-extrabold tracking-tight">VisioWeb</span>
+        </div>
+        <div class="hidden md:flex items-center gap-6 text-sm">
+          <a href="#servicos" class="hover:underline">Serviços</a>
+          <a href="#precos" class="hover:underline">Preços</a>
+          <a href="#portfolio" class="hover:underline">Portfólio</a>
+          <a href="#planos" class="hover:underline">Planos</a>
+          <a href="#contato" class="hover:underline">Contato</a>
+          <a href="https://wa.me/55SEUNUMERO?text=Ol%C3%A1%2C%20quero%20um%20site%20com%20a%20VisioWeb"
+             class="bg-white text-slate-900 px-4 py-2 rounded-xl font-semibold shadow-soft hover:opacity-90">
+             Fale no WhatsApp
+          </a>
+        </div>
+      </nav>
+
+      <div class="mt-16 grid lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight">
+            Sites e Apps que <span class="underline decoration-4 decoration-white/50">vendem</span> por você.
+          </h1>
+          <p class="mt-5 text-white/90 text-lg">
+            Landing pages, e-commerce e aplicativos sob medida para pequenos negócios. Hospedagem e manutenção inclusas.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="#portfolio" class="px-6 py-3 rounded-xl bg-white text-slate-900 font-semibold shadow-soft">Ver exemplos</a>
+            <a href="#contato" class="px-6 py-3 rounded-xl border border-white/30 font-semibold hover:bg-white/10">Pedir orçamento</a>
+          </div>
+        </div>
+
+        <!-- CARROSSEL COM IMAGENS (sem “salto”) -->
+        <div class="glass rounded-3xl p-6 shadow-soft" x-data="carousel()" x-init="start()">
+          <div class="relative rounded-2xl overflow-hidden border border-white/10">
+            <div class="relative aspect-[16/9]">
+              <template x-for="(slide,i) in slides" :key="i">
+                <div x-show="current===i" x-cloak x-transition.opacity.duration.300ms class="absolute inset-0">
+                  <img :src="slide.src" alt="" class="absolute inset-0 w-full h-full object-cover" />
+                  <div class="absolute inset-0 bg-black/30"></div>
+                  <div class="absolute inset-0 flex items-center justify-center text-center p-8">
+                    <div>
+                      <p class="text-2xl sm:text-3xl font-extrabold" x-text="slide.title"></p>
+                      <p class="mt-2 text-sm sm:text-base text-white/90" x-text="slide.desc"></p>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+
+            <!-- Controles -->
+            <button @click="prev(); restart()" class="absolute left-3 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur flex items-center justify-center">‹</button>
+            <button @click="next(); restart()" class="absolute right-3 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur flex items-center justify-center">›</button>
+
+            <!-- Dots -->
+            <div class="absolute bottom-3 inset-x-0 flex justify-center gap-2">
+              <template x-for="(slide, i) in slides" :key="'dot-'+i">
+                <button @click="go(i); restart()" class="h-2.5 rounded-full transition-all" :class="current===i ? 'w-6 bg-white' : 'w-2.5 bg-white/50'"></button>
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SERVIÇOS -->
+  <section id="servicos" class="py-20">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <h2 class="text-3xl font-extrabold">O que fazemos</h2>
+      <p class="mt-2 text-white/80">Da ideia ao ar: criamos, hospedamos e cuidamos para você focar no seu negócio.</p>
+
+      <div class="mt-10 grid md:grid-cols-3 gap-6">
+        <div class="glass p-6 rounded-2xl">
+          <h3 class="font-bold">Sites profissionais</h3>
+          <p class="mt-2 text-sm text-white/80">Landing pages e sites modernos com performance e SEO.</p>
+          <ul class="mt-4 text-sm list-disc list-inside text-white/80">
+            <li>Design responsivo</li>
+            <li>Formulários e WhatsApp</li>
+          </ul>
+        </div>
+
+        <div class="glass p-6 rounded-2xl">
+          <h3 class="font-bold">Aplicativos leves</h3>
+          <p class="mt-2 text-sm text-white/80">Soluções web/app para agendamentos, cardápios, etc.</p>
+          <ul class="mt-4 text-sm list-disc list-inside text-white/80">
+            <li>Banco de dados seguro</li>
+            <li>Painel simples de gestão</li>
+          </ul>
+        </div>
+
+        <div class="glass p-6 rounded-2xl">
+          <h3 class="font-bold">Hospedagem & manutenção</h3>
+          <p class="mt-2 text-sm text-white/80">Monitoramento, atualizações e suporte contínuo.</p>
+          <ul class="mt-4 text-sm list-disc list-inside text-white/80">
+            <li>Hospedagem</li>
+            <li>Backups</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREÇOS (SITES) -->
+  <section id="precos" class="py-20 bg-slate-950/40">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <h2 class="text-3xl font-extrabold">Preços dos sites</h2>
+      <p class="mt-2 text-white/80">Projetos fechados sob demanda. Prazos e escopo combinados antes do início.</p>
+
+      <div class="mt-10 grid md:grid-cols-3 gap-6">
+        <div class="glass p-6 rounded-2xl">
+          <p class="text-xs uppercase tracking-widest text-white/70">Site simples</p>
+          <h3 class="mt-2 text-3xl font-extrabold">R$ 500-800</h3>
+          <p class="mt-2 text-sm text-white/80">Landing/até 3 páginas, sem backend.</p>
+          <ul class="mt-4 text-sm text-white/80 space-y-2">
+            <li>• Layout responsivo</li>
+            <li>• Copy básica</li>
+            <li>• SEO on-page básico</li>
+          </ul>
+        </div>
+
+        <div class="glass p-6 rounded-2xl border-2 border-white/30">
+          <p class="text-xs uppercase tracking-widest text-white/70">Site moderno</p>
+          <h3 class="mt-2 text-3xl font-extrabold">R$ 1.000-1500</h3>
+          <p class="mt-2 text-sm text-white/80">Websites modernos para o seu negócio</p>
+          <ul class="mt-4 text-sm text-white/80 space-y-2">
+            <li>• Melhor performance</li>
+            <li>• Compatibilidade com diversos dispositivos(Desktop, Celular, Tablets)</li>
+          </ul>
+        </div>
+
+        <div class="glass p-6 rounded-2xl">
+          <p class="text-xs uppercase tracking-widest text-white/70">Fullstack</p>
+          <h3 class="mt-2 text-3xl font-extrabold">R$ 2.000-4.000</h3>
+          <p class="mt-2 text-sm text-white/80">Frontend + backend</p>
+          <ul class="mt-4 text-sm text-white/80 space-y-2">
+            <li>• Ex.: dashboard, multiusuários</li>
+            <li>• Uploads</li>
+            <li>• Auth, CRUD, painel admin simples.</li>
+            <li>• Banco de dados + data storage</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFÓLIO / EXEMPLOS -->
+  <section id="portfolio" class="py-20">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <h2 class="text-3xl font-extrabold">Exemplos de soluções</h2>
+      <p class="mt-2 text-white/80">Alguns formatos prontos para adaptar ao seu negócio.</p>
+
+      <div class="mt-10 grid lg:grid-cols-4 sm:grid-cols-2 gap-6">
+        <!-- Landing Page -->
+        <article class="glass rounded-2xl overflow-hidden flex flex-col">
+          <img src="projetos/landingpage/img/lg.png" alt="Preview Landing Page" class="h-36 w-full object-cover" />
+          <div class="p-5 grow">
+            <h3 class="font-bold">Landing Pages</h3>
+            <p class="mt-2 text-sm text-white/80">Landing Page moderna e chamativa.</p>
+            <ul class="mt-3 text-xs text-white/70 space-y-1">
+              <li>• Moderna para produto ou curso</li>
+              <li>• SEO básico e código limpo para editar rápido.</li>
+              <li>• CTA otimizado para WhatsApp</li>
+            </ul>
+          </div>
+          <div class="p-5 pt-0"><div class="flex items-center gap-3"><a class="inline-block text-sm font-semibold underline" href="projetos/landingpage/index.html"target="_blank"rel="noopener">Ver demo</a><a class="inline-block text-sm font-semibold underline" href="#contato">Quero assim</a></div></div>
+        </article>
+
+        <!-- Comércio local -->
+        <article class="glass rounded-2xl overflow-hidden flex flex-col">
+          <img src="projetos/comercio/img/comercio.png" alt="Preview Comercio" class="h-36 w-full object-cover" />
+          <div class="p-5 grow">
+            <h3 class="font-bold">Site para Pequeno Comércio</h3>
+            <p class="mt-2 text-sm text-white/80">Apresentação, catálogo simples e CTA para vender no WhatsApp.</p>
+            <ul class="mt-3 text-xs text-white/70 space-y-1">
+              <li>• Depoimentos e provas sociais</li>
+              <li>• Catálogo com variações</li>
+              <li>• Entrega/retirada combinada</li>
+            </ul>
+          </div>
+          <div class="p-5 pt-0"><div class="flex items-center gap-3"><a class="inline-block text-sm font-semibold underline" href="projetos/comercio/index.html"target="_blank"rel="noopener">Ver demo</a><a class="inline-block text-sm font-semibold underline" href="#contato">Quero assim</a></div></div>
+        </article>
+
+        <!-- Barbearia -->
+        <article class="glass rounded-2xl overflow-hidden flex flex-col">
+          <img src="projetos/barber/img/barber.png" alt="Preview Barber" class="h-36 w-full object-cover" />
+          <div class="p-5 grow">
+            <h3 class="font-bold">App Básico de Barbearia</h3>
+            <p class="mt-2 text-sm text-white/80">Marcação de horário simples com confirmação via WhatsApp.</p>
+          </div>
+          <div class="p-5 pt-0"><div class="flex items-center gap-3"><a class="inline-block text-sm font-semibold underline"href="projetos/barber/index.html"target="_blank"rel="noopener">Ver demo</a><a class="inline-block text-sm font-semibold underline" href="#contato">Quero assim</a></div></div>
+        </article>
+
+        <!-- Restaurante -->
+        <article class="glass rounded-2xl overflow-hidden flex flex-col">
+          <img src="projetos/restaurante/assets/img/sitecardapio.png" alt="Preview Restaurante" class="h-36 w-full object-cover" />
+          <div class="p-5 grow">
+            <h3 class="font-bold">Restaurante com Cardápio</h3>
+            <p class="mt-2 text-sm text-white/80">Cardápio online com categorias, fotos e QR Code para mesas.</p>
+            <ul class="mt-3 text-xs text-white/70 space-y-1">
+              <li>• Design responsivo</li>
+              <li>• Destaques e combos</li>
+              <li>• Pedido via WhatsApp</li>
+            </ul>
+          </div>
+          <div class="p-5 pt-0"><div class="flex items-center gap-3"><a class="inline-block text-sm font-semibold underline" href="projetos/restaurante/index.html"target="_blank" rel="noopener noreferrer">Ver demo</a><a class="inline-block text-sm font-semibold underline" href="#contato">Quero assim</a></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANOS (MANUTENÇÃO & HOSPEDAGEM) -->
+  <section id="planos" class="py-20 bg-slate-950/40">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <h2 class="text-3xl font-extrabold">Planos de manutenção & hospedagem</h2>
+      <p class="mt-2 text-white/80">Estes serviços estão apenas disponíveis para clientes que comprarem sites conosco.</p>
+
+      <div class="mt-10 grid md:grid-cols-2 gap-6">
+        <!-- Starter -->
+        <div class="glass p-6 rounded-2xl">
+          <p class="text-xs uppercase tracking-widest text-white/70">Starter</p>
+          <h3 class="mt-2 text-3xl font-extrabold">R$ 300/mês</h3>
+          <ul class="mt-4 text-sm text-white/80 space-y-2">
+            <li>• Hospedagem + domínio do site</li>
+            <li>• Manutenção mensal</li>
+            <li>• Suporte básico</li>
+          </ul>
+          
+        </div>
+
+        <!-- Pro -->
+        <div class="glass p-6 rounded-2xl border-2 border-white/30">
+          <p class="text-xs uppercase tracking-widest text-white/70">Pro</p>
+          <h3 class="mt-2 text-3xl font-extrabold">R$ 500/mês</h3>
+          <ul class="mt-4 text-sm text-white/80 space-y-2">
+            <li>• Hospedagem + domínio do site</li>
+            <li>• Manutenção</li>
+            <li>• Suporte prioritário</li>
+            <li>• Informações sobre tráfego e desempenho</li>
+            <li>• Temas sazonais (Natal, Ano Novo, etc.)</li>
+            <li>• Web Application Firewall</li>
+          </ul>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contato" class="py-20">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-extrabold">Pronto para modernizar o seu negócio?</h2>
+      <p class="mt-2 text-white/80">Me chame no WhatsApp e receba um orçamento em poucos minutos.</p>
+      <a href="https://wa.me/55SEUNUMERO?text=Ol%C3%A1%2C%20quero%20um%20site%20com%20a%20VisioWeb"
+         class="mt-6 inline-block bg-white text-slate-900 px-8 py-3 rounded-2xl font-semibold shadow-soft">
+         Falar no WhatsApp
+      </a>
+      <p class="mt-4 text-xs text-white/60">Ou envie e-mail para <span class="underline">visiowebonline@gmail.com</span></p>
+    </div>
+  </section>
+
+  <!-- FOOTER centralizado -->
+  <footer class="py-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex flex-col items-center justify-center gap-3 text-center">
+        <img src="assets/logo.png" class="h-8 w-8 rounded-md" alt="VisioWeb" />
+        <span class="text-sm text-white/80">© 2025 VisioWeb. Todos os direitos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function carousel(){
+      return {
+        current: 0,
+        timer: null,
+        slides: [
+          { src: 'assets/carousel/slide1.png' },
+          { src: 'assets/carousel/slide2.png' },
+          { src: 'assets/carousel/slide3.png' },
+        ],
+        start(){ this.timer = setInterval(()=>this.next(), 3500) },
+        restart(){ if(this.timer){ clearInterval(this.timer) } this.start() },
+        next(){ this.current = (this.current + 1) % this.slides.length },
+        prev(){ this.current = (this.current + this.slides.length - 1) % this.slides.length },
+        go(i){ this.current = i },
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="auto">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Landing Exemplo — Produto/Curso | VisioWeb</title>
+  <meta name="description" content="Modelo de landing page simples para produto ou curso. Copie, edite e publique.">
+  <meta property="og:title" content="Landing Exemplo — Produto/Curso">
+  <meta property="og:description" content="Modelo de landing page simples para produto ou curso. Copie, edite e publique.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#111827">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23111827'/%3E%3Ctext x='50%25' y='53%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial, Helvetica, sans-serif' font-size='30' fill='white'%3EV%3C/text%3E%3C/svg%3E">
+  <style>
+    /* ========================
+       LANDING EXEMPLO — VisioWeb
+       ------------------------
+       COMO EDITAR RÁPIDO:
+       1) Troque as variáveis em :root (cores).
+       2) Procure por CONFIG abaixo para mudar nome, preço e WhatsApp.
+       3) Salve como index.html e suba para seu servidor/Vercel.
+       ======================== */
+
+    :root {
+      --bg: #0b1220;
+      --bg-soft: #0f172a;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --brand: #22c55e;
+      --brand-2: #38bdf8;
+      --card: #111827;
+      --stroke: #1f2937;
+      --shadow: 0 10px 25px rgba(0,0,0,.35);
+      color-scheme: dark;
+    }
+    html[data-theme="light"]{
+      --bg:#ffffff; --bg-soft:#f5f7fb; --card:#ffffff; --text:#0f172a; --muted:#6b7280; --stroke:#e5e7eb; --shadow: 0 10px 25px rgba(2,6,23,.08);
+      color-scheme: light;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(60% 60% at 10% 10%, rgba(34,197,94,.15), transparent 50%),
+        radial-gradient(60% 60% at 90% 10%, rgba(56,189,248,.15), transparent 50%),
+        radial-gradient(60% 60% at 50% 100%, rgba(255,255,255,.05), transparent 50%),
+        var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      scroll-behavior:smooth;
+    }
+    .container{max-width:1100px; margin-inline:auto; padding: 24px 20px}
+    .nav{
+      display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 0;
+    }
+    .logo{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px}
+    .logo-badge{
+      width:36px; height:36px; display:grid; place-items:center; border-radius:10px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow: var(--shadow);
+      color:#071318; font-weight:900;
+    }
+    .nav a.btn, .btn{
+      display:inline-flex; gap:10px; align-items:center; justify-content:center; text-decoration:none;
+      background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#041016; padding:10px 16px; border-radius:12px; font-weight:700;
+      box-shadow: var(--shadow); border:0; cursor:pointer;
+    }
+    .btn.secondary{
+      background:transparent; color:var(--text); border:1px solid var(--stroke);
+    }
+    .hero{padding: 24px 0 10px}
+    .badge{
+      display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border:1px solid var(--stroke); border-radius:999px; color:var(--muted);
+      background: rgba(255,255,255,.03);
+    }
+    .badge .dot{width:8px; height:8px; border-radius:999px; background:linear-gradient(135deg,var(--brand),var(--brand-2))}
+    h1{font-size: clamp(36px, 5vw, 56px); line-height:1.05; margin:16px 0 12px; letter-spacing:-.02em}
+    .lead{font-size: clamp(16px, 2.4vw, 19px); color:var(--muted); max-width: 70ch}
+    .hero-cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--stroke); border-radius:18px; padding:18px; box-shadow: var(--shadow);
+    }
+    .grid{display:grid; gap:16px}
+    .grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media (max-width:900px){ .grid.cols-3{grid-template-columns:1fr 1fr} }
+    @media (max-width:640px){ .grid.cols-3, .grid.cols-2{grid-template-columns:1fr} }
+    .kpis{margin:18px 0 6px; display:flex; gap:12px; flex-wrap:wrap}
+    .kpis .kpi{padding:10px 14px; border-radius:12px; border:1px dashed var(--stroke); color:var(--muted); background: rgba(255,255,255,.03)}
+    section{padding: 26px 0}
+    h2{font-size: clamp(24px, 3vw, 32px); margin:0 0 14px}
+    .list{padding:0; margin:10px 0 0; list-style:none}
+    .list li{display:flex; gap:10px; align-items:flex-start; margin:8px 0; color:var(--text)}
+    .list li .check{width:20px; height:20px; border-radius:6px; display:grid; place-items:center; background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#031018; font-weight:900}
+    .muted{color:var(--muted)}
+    .pill{display:inline-block; padding:8px 10px; border:1px solid var(--stroke); border-radius:999px; color:var(--muted)}
+    .price{font-size: clamp(28px, 3.5vw, 40px); font-weight:900}
+    .oldprice{color:var(--muted); text-decoration:line-through; margin-left:8px; font-weight:500}
+    .guarantee{display:flex; gap:10px; align-items:center; color:var(--muted)}
+    .faq details{border:1px solid var(--stroke); border-radius:14px; padding:14px 16px; margin:10px 0; background: rgba(255,255,255,.03)}
+    .faq summary{cursor:pointer; font-weight:700}
+    .footer{padding:30px 0 50px; color:var(--muted); text-align:center; font-size:14px}
+    .floating-cta{
+      position: fixed; right: 18px; bottom: 18px; z-index: 50;
+      display:flex; gap:10px; align-items:center;
+    }
+    .toggle{background:transparent; border:1px solid var(--stroke); color:var(--text); padding:8px 10px; border-radius:12px; cursor:pointer}
+    .logo-mark{font-weight:900; font-size:18px}
+    .hero-img{ aspect-ratio: 16/9; width:100%; border-radius:18px; border:1px solid var(--stroke); background:
+      radial-gradient(120% 100% at 20% 0%, rgba(34,197,94,.2), transparent 40%),
+      radial-gradient(120% 100% at 80% 0%, rgba(56,189,248,.25), transparent 40%),
+      linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); display:grid; place-items:center; color:var(--muted);
+      box-shadow: var(--shadow);
+    }
+    .hero-img svg{width: 64%; max-width: 620px; height: auto}
+    .ribbon{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background: linear-gradient(135deg,var(--brand),var(--brand-2)); color:#041016; font-weight:800; box-shadow: var(--shadow)}
+  </style>
+</head>
+<body>
+  <header class="container nav">
+    <div class="logo">
+      <div class="logo-badge">V</div>
+      <div>
+        <div class="logo-mark">VisioWeb</div>
+        <small class="muted">Landing de Produto/Curso (Exemplo)</small>
+      </div>
+    </div>
+    <nav>
+      <a href="#beneficios" class="pill">Benefícios</a>
+      <a href="#conteudo" class="pill">Conteúdo</a>
+      <a href="#preco" class="pill">Preço</a>
+      <a class="btn js-whatsapp">Comprar no WhatsApp</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <span class="badge"><span class="dot"></span> Novo modelo pronto para publicar</span>
+      <h1><span class="ribbon">NOVIDADE</span> Domine <span style="background:linear-gradient(135deg,var(--brand),var(--brand-2)); -webkit-background-clip:text; background-clip:text; color:transparent">[Nome do Produto/Curso]</span> e gere resultados reais em poucos dias.</h1>
+      <p class="lead">Uma landing simples, bonita e objetiva. Ideal para validar ofertas e vender pelo WhatsApp sem complicação.</p>
+      <div class="hero-cta">
+        <a class="btn js-whatsapp">Quero garantir minha vaga</a>
+        <a href="#conteudo" class="btn secondary">Ver conteúdo</a>
+        <button class="toggle" id="themeToggle" title="Alternar tema">🌙/☀️</button>
+      </div>
+      <div class="kpis">
+        <div class="kpi">⚡ Leve e 100% HTML</div>
+        <div class="kpi">📱 Responsivo</div>
+        <div class="kpi">🧭 SEO básico</div>
+        <div class="kpi">💬 CTA direto no WhatsApp</div>
+      </div>
+
+      <div class="hero-img card" aria-label="Prévia do produto/curso">
+        <!-- Substitua por um print ou imagem do seu produto -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 560" role="img" aria-label="Mockup do site">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#22c55e" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.4"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="980" height="560" rx="18" fill="url(#g)"/>
+          <rect x="40" y="40" width="900" height="120" rx="12" fill="#0b1220" opacity="0.6"/>
+          <rect x="40" y="200" width="500" height="40" rx="8" fill="#0b1220" opacity="0.5"/>
+          <rect x="40" y="260" width="700" height="14" rx="7" fill="#0b1220" opacity="0.4"/>
+          <rect x="40" y="285" width="660" height="14" rx="7" fill="#0b1220" opacity="0.35"/>
+          <rect x="40" y="310" width="500" height="14" rx="7" fill="#0b1220" opacity="0.3"/>
+          <rect x="40" y="360" width="220" height="44" rx="10" fill="#22c55e"/>
+          <rect x="280" y="360" width="180" height="44" rx="10" fill="#38bdf8"/>
+        </svg>
+      </div>
+    </section>
+
+    <section id="beneficios">
+      <div class="grid cols-3">
+        <article class="card">
+          <h2>Para quem é</h2>
+          <ul class="list">
+            <li><span class="check">✓</span> Iniciantes que querem vender online rápido</li>
+            <li><span class="check">✓</span> Negócios locais e infoprodutores</li>
+            <li><span class="check">✓</span> Quem precisa validar uma oferta</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h2>O que você recebe</h2>
+          <ul class="list">
+            <li><span class="check">✓</span> Seção de benefícios objetiva</li>
+            <li><span class="check">✓</span> Conteúdo do produto/curso</li>
+            <li><span class="check">✓</span> Depoimentos e FAQ</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h2>Diferenciais</h2>
+          <ul class="list">
+            <li><span class="check">✓</span> Leitura fácil, design atual</li>
+            <li><span class="check">✓</span> Código comentado para editar</li>
+            <li><span class="check">✓</span> Botão para WhatsApp com mensagem pronta</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="conteudo">
+      <div class="grid cols-2">
+        <article class="card">
+          <h2>Conteúdo / Módulos</h2>
+          <ol class="list" style="counter-reset:item;">
+            <li><span class="check">1</span> Fundamentos e proposta</li>
+            <li><span class="check">2</span> Passo a passo prático</li>
+            <li><span class="check">3</span> Estudos de caso</li>
+            <li><span class="check">4</span> Bônus e materiais extras</li>
+          </ol>
+          <p class="muted">Dica: troque estes itens pelos tópicos reais do seu produto/curso.</p>
+        </article>
+        <article class="card">
+          <h2>Depoimentos</h2>
+          <div class="grid">
+            <blockquote class="card" style="margin:0">
+              <p>“Simples e direto. Botei no ar em 10 minutos e já fechei vendas pelo Whats.”</p>
+              <small class="muted">— Ana, Negócio Local</small>
+            </blockquote>
+            <blockquote class="card" style="margin:0">
+              <p>“Layout limpo, muito fácil de editar. Perfeito pra validar oferta.”</p>
+              <small class="muted">— Lucas, Produtor</small>
+            </blockquote>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="preco">
+      <div class="grid cols-2">
+        <article class="card">
+          <h2>Oferta</h2>
+          <p class="muted">Acesso imediato + atualizações do template</p>
+          <div style="display:flex; align-items:flex-end; gap:10px; margin:6px 0 12px">
+            <div class="price"><span id="priceValue">R$ 197</span></div>
+            <div class="oldprice" id="oldPriceValue">R$ 297</div>
+          </div>
+          <ul class="list">
+            <li><span class="check">✓</span> Suporte por e-mail básico</li>
+            <li><span class="check">✓</span> Garantia de 7 dias</li>
+            <li><span class="check">✓</span> Pagamento via WhatsApp</li>
+          </ul>
+          <div class="hero-cta">
+            <a class="btn js-whatsapp">Quero comprar agora</a>
+            <a href="#faq" class="btn secondary">Tirar dúvidas</a>
+          </div>
+          <p class="guarantee">🛡️ Garantia incondicional de 7 dias.</p>
+        </article>
+        <article class="card">
+          <h2>O que acontece após a compra?</h2>
+          <ol class="list">
+            <li><span class="check">1</span> Você clica no botão e fala com a gente no WhatsApp.</li>
+            <li><span class="check">2</span> Enviamos o link de pagamento e o arquivo.</li>
+            <li><span class="check">3</span> É só editar o conteúdo e publicar.</li>
+          </ol>
+          <p class="muted">Opcional: adicionamos seu logo, cores e textos por uma taxa única.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="faq" class="faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>Posso usar para um <strong>produto físico</strong> ou <strong>curso</strong>?</summary>
+        <p>Sim! O texto está genérico para funcionar nos dois cenários. Basta ajustar a promessa e os módulos.</p>
+      </details>
+      <details>
+        <summary>Como mudo o preço e o telefone do WhatsApp?</summary>
+        <p>No final do arquivo, procure por <code>// CONFIG</code> e atualize <code>whatsappNumber</code>, <code>productName</code>, <code>price</code> e <code>oldPrice</code>.</p>
+      </details>
+      <details>
+        <summary>Posso colocar no Vercel?</summary>
+        <p>Sim. Por ser um arquivo HTML estático, basta criar um projeto e arrastar o arquivo <code>index.html</code>.</p>
+      </details>
+    </section>
+  </main>
+
+  <div class="floating-cta">
+    <button class="toggle" id="floatTheme">🌙/☀️</button>
+    <a class="btn js-whatsapp">Comprar no WhatsApp</a>
+  </div>
+
+  <footer class="footer container">
+    <div>© <span id="year"></span> VisioWeb • Exemplo de landing simples</div>
+    <div class="muted">Feito com HTML/CSS/JS puro</div>
+  </footer>
+
+  <script>
+    // ============ THEME ============
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const getStored = () => localStorage.getItem('vw-theme');
+    const setTheme = (t) => { document.documentElement.setAttribute('data-theme', t); localStorage.setItem('vw-theme', t); };
+    (function initTheme(){
+      const saved = getStored();
+      if(saved){ setTheme(saved); }
+      else { setTheme(prefersDark ? 'dark':'light'); }
+    })();
+    document.getElementById('themeToggle').onclick =
+    document.getElementById('floatTheme').onclick = () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    };
+
+    // ============ CONFIG ============
+    // Troque estes valores para personalizar rapidamente
+    const whatsappNumber = '55XXXXXXXXXXX';  // Ex: 55 11 91234-5678 => '5511912345678'
+    const productName    = '[Nome do Produto/Curso]';
+    const price          = 'R$ 197';
+    const oldPrice       = 'R$ 297'; // ou deixe vazio ''
+
+    // Atualiza textos de preço
+    document.getElementById('priceValue').textContent = price;
+    const oldEl = document.getElementById('oldPriceValue');
+    if(!oldPrice){ oldEl.style.display='none'; } else { oldEl.textContent = oldPrice; }
+
+    // Monta link com mensagem pronta para WhatsApp
+    function buildWhatsLink(){
+      const msg = `Olá! Tenho interesse em comprar: ${productName}. Vi a oferta por ${price} na landing. Pode me enviar o link de pagamento?`;
+      return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
+    }
+    function wireWhatsApp(){
+      document.querySelectorAll('.js-whatsapp').forEach(a => {
+        a.setAttribute('href', buildWhatsLink());
+        a.setAttribute('target','_blank');
+        a.setAttribute('rel','noopener noreferrer');
+      });
+    }
+    wireWhatsApp();
+
+    // Utilidades
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

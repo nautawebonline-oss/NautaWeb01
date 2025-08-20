@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pequeno Comércio — Demo</title>
+  <meta name="description" content="Site de exemplo para pequeno comércio: apresentação, catálogo com variações e pedido via WhatsApp com entrega/retirada."/>
+  <style>
+    /* ==========================
+       Tema & Reset básico
+       ========================== */
+    :root{
+      --bg: #0b0f14;
+      --panel: #111827;
+      --card: #0f172a;
+      --text: #e5e7eb;
+      --muted: #a3aed0;
+      --primary: #22c55e; /* verde whats */
+      --accent: #3b82f6;
+      --border: #1f2937;
+      --warning: #fbbf24;
+      --danger: #ef4444;
+      --shadow: 0 10px 25px rgba(0,0,0,.3);
+      --radius: 16px;
+    }
+    [data-theme="light"]{
+      --bg: #f7fafc;
+      --panel: #ffffff;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #16a34a;
+      --accent: #2563eb;
+      --border: #e2e8f0;
+      --shadow: 0 10px 25px rgba(2,6,23,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji","Segoe UI Emoji"}
+    a{color:inherit}
+    img{max-width:100%;display:block}
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+    .btn{display:inline-flex;align-items:center;gap:.6rem;border:none;border-radius:999px;padding:.9rem 1.2rem;font-weight:700;cursor:pointer;text-decoration:none;box-shadow:var(--shadow);transition:.2s transform, .2s opacity}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+    .btn-primary{background:var(--primary);color:#04140a}
+    .btn-ghost{background:transparent;border:1px solid var(--border)}
+    .badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.06);border:1px solid var(--border);padding:.35rem .6rem;border-radius:999px;font-size:.8rem}
+    .muted{color:var(--muted)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .grid{display:grid;gap:20px}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    @media (max-width:900px){.grid-3{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:640px){.grid-3{grid-template-columns:1fr}}
+
+    /* ==========================
+       Header & Hero
+       ========================== */
+    header{position:sticky;top:0;z-index:20;background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,0));backdrop-filter:saturate(120%) blur(10px)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+    .logo{display:flex;align-items:center;gap:.7rem;font-weight:900;letter-spacing:.5px}
+    .logo-dot{width:10px;height:10px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 6px rgba(34,197,94,.15)}
+    .nav-actions{display:flex;align-items:center;gap:10px}
+    .theme-toggle{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--border);border-radius:999px;padding:.45rem .7rem;background:var(--panel);cursor:pointer}
+
+    .hero{padding:60px 0 30px}
+    .hero .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}
+    @media (max-width:900px){.hero .wrap{grid-template-columns:1fr}}
+    .hero .headline{font-weight:900;font-size:clamp(1.8rem, 2.6vw, 3rem);line-height:1.15;margin:0 0 14px}
+    .hero p{margin:0 0 22px}
+    .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+    .proofs{display:flex;gap:14px;flex-wrap:wrap;margin-top:22px}
+
+    /* Thumb placeholder para produtos */
+    .thumb{position:relative;aspect-ratio:16/10;border-radius:14px;background:linear-gradient(135deg, rgba(59,130,246,.18), rgba(34,197,94,.18));display:grid;place-items:center;border:1px solid var(--border);overflow:hidden}
+    .thumb::after{content:attr(data-label);font-weight:800;font-size:1.1rem;color:var(--muted);letter-spacing:.4px}
+
+    /* ==========================
+       Catálogo
+       ========================== */
+    section{padding:50px 0}
+    h2.section-title{font-size:1.6rem;margin:0 0 16px}
+    .product{display:flex;flex-direction:column}
+    .product .body{padding:16px}
+    .product h3{margin:0 0 6px;font-size:1.1rem}
+    .product .price{font-weight:800}
+    .product form{display:grid;gap:10px;margin-top:12px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media (max-width:520px){.row{grid-template-columns:1fr}}
+    select, input[type="number"], input[type="text"], textarea{width:100%;background:transparent;color:var(--text);border:1px solid var(--border);border-radius:10px;padding:.6rem .7rem}
+    select option{color:#0f172a}
+    label{font-size:.9rem;color:var(--muted)}
+
+    /* ==========================
+       Depoimentos
+       ========================== */
+    .quotes{display:grid;gap:20px}
+    .quote{padding:18px}
+    .stars{color:#fbbf24}
+
+    /* ==========================
+       Drawer do Pedido
+       ========================== */
+    .drawer-toggle{position:fixed;right:18px;bottom:18px;z-index:30}
+    .drawer{
+      position:fixed;inset:0 0 0 auto;width:min(480px, 100%);
+      transform:translateX(100%);
+      transition:transform .25s ease;z-index:40;
+      background:var(--panel);border-left:1px solid var(--border);box-shadow:var(--shadow);
+      display:flex;flex-direction:column
+    }
+    .drawer.open{transform:translateX(0)}
+    .drawer header{position:sticky;top:0;background:var(--panel);padding:16px;border-bottom:1px solid var(--border)}
+    .drawer main{padding:16px;overflow:auto;flex:1}
+    .drawer footer{padding:16px;border-top:1px solid var(--border)}
+    .cart-item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:12px;border:1px solid var(--border);border-radius:12px;margin-bottom:10px}
+    .cart-item .meta{font-size:.9rem;color:var(--muted)}
+    .cart-empty{padding:18px;border:1px dashed var(--border);border-radius:12px;text-align:center;color:var(--muted)}
+
+    /* ==========================
+       Footer
+       ========================== */
+    footer.site{padding:40px 0;border-top:1px solid var(--border)}
+  </style>
+</head>
+<body>
+  <!-- =====================================
+       HEADER
+       ===================================== -->
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        <span class="logo-dot"></span>
+        <span>Seu Negócio</span>
+        <span class="badge" title="Demonstração">DEMO</span>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeBtn" aria-label="Alternar tema">🌙 <span class="muted">Tema</span></button>
+        <a href="#catalogo" class="btn btn-ghost">Ver catálogo</a>
+        <button class="btn btn-primary" id="openCartBtn">Pedido (0)</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================================
+       HERO
+       ===================================== -->
+  <section class="hero">
+    <div class="container wrap">
+      <div>
+        <h1 class="headline">Venda pelo WhatsApp com um site simples — perfeito para o seu pequeno comércio.</h1>
+        <p>Apresente seus produtos, receba pedidos com variações e combine <strong>entrega ou retirada</strong> diretamente no WhatsApp. Sem complicação.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#catalogo">Ver catálogo</a>
+          <button class="btn btn-ghost" id="ctaWhats">Falar no WhatsApp</button>
+        </div>
+        <div class="proofs">
+          <span class="badge">⭐️⭐️⭐️⭐️⭐️ <strong>4,9/5</strong> (212 avaliações)</span>
+          <span class="badge">📦 <strong>1.500+</strong> pedidos entregues</span>
+          <span class="badge">🛵 Entrega & 🏪 Retirada</span>
+        </div>
+      </div>
+      <div class="card" style="padding:20px">
+        <div class="thumb" data-label="Vitrine do seu negócio"></div>
+        <div class="muted" style="margin-top:12px">Este é um mock visual. Substitua por fotos reais do seu comércio para aumentar a conversão.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================
+       CATÁLOGO
+       ===================================== -->
+  <section id="catalogo">
+    <div class="container">
+      <h2 class="section-title">Catálogo</h2>
+      <p class="muted" style="margin:-6px 0 16px">Escolha o produto, defina as variações e adicione ao pedido. Você finalizará no WhatsApp.</p>
+
+      <div class="grid grid-3">
+        <!-- Produto 1: Camiseta Básica -->
+        <article class="card product" data-base-price="59.9">
+          <div class="thumb" data-label="Camiseta Básica"></div>
+          <div class="body">
+            <h3>Camiseta Básica</h3>
+            <div class="muted">100% algodão, conforto para o dia a dia.</div>
+            <div class="price" data-price>R$ 59,90</div>
+
+            <form>
+              <div class="row">
+                <label>
+                  Tamanho
+                  <select name="tamanho" data-add-map>
+                    <option value="P" data-add="0">P</option>
+                    <option value="M" data-add="5">M (+R$ 5,00)</option>
+                    <option value="G" data-add="10">G (+R$ 10,00)</option>
+                  </select>
+                </label>
+                <label>
+                  Cor
+                  <select name="cor">
+                    <option value="Preta">Preta</option>
+                    <option value="Branca">Branca</option>
+                  </select>
+                </label>
+              </div>
+              <div class="row">
+                <label>
+                  Quantidade
+                  <input type="number" name="qty" min="1" value="1" />
+                </label>
+                <div style="display:flex;align-items:flex-end"><button type="button" class="btn btn-primary add-btn">Adicionar ao pedido</button></div>
+              </div>
+            </form>
+          </div>
+        </article>
+
+        <!-- Produto 2: Caneca Personalizada -->
+        <article class="card product" data-base-price="29.9">
+          <div class="thumb" data-label="Caneca Personalizada"></div>
+          <div class="body">
+            <h3>Caneca Personalizada</h3>
+            <div class="muted">Estampa a sua marca. Presente perfeito.</div>
+            <div class="price" data-price>R$ 29,90</div>
+
+            <form>
+              <div class="row">
+                <label>
+                  Capacidade
+                  <select name="capacidade">
+                    <option value="250ml" data-price="29.9">250 ml</option>
+                    <option value="350ml" data-price="34.9">350 ml</option>
+                  </select>
+                </label>
+                <label>
+                  Cor
+                  <select name="cor">
+                    <option value="Branca">Branca</option>
+                    <option value="Preta">Preta</option>
+                  </select>
+                </label>
+              </div>
+              <div class="row">
+                <label>
+                  Quantidade
+                  <input type="number" name="qty" min="1" value="1" />
+                </label>
+                <div style="display:flex;align-items:flex-end"><button type="button" class="btn btn-primary add-btn">Adicionar ao pedido</button></div>
+              </div>
+            </form>
+          </div>
+        </article>
+
+        <!-- Produto 3: Brownie Artesanal -->
+        <article class="card product" data-base-price="9.9">
+          <div class="thumb" data-label="Brownie Artesanal"></div>
+          <div class="body">
+            <h3>Brownie Artesanal</h3>
+            <div class="muted">Feito com chocolate 50% cacau, macio e úmido.</div>
+            <div class="price" data-price>R$ 9,90</div>
+
+            <form>
+              <div class="row">
+                <label>
+                  Sabor
+                  <select name="sabor">
+                    <option value="Tradicional" data-price="9.9">Tradicional</option>
+                    <option value="Ninho" data-price="12.9">Ninho</option>
+                    <option value="Doce de Leite" data-price="11.9">Doce de Leite</option>
+                  </select>
+                </label>
+                <label>
+                  Observação
+                  <input type="text" name="obs" placeholder="Sem lactose? Sem nozes?"/>
+                </label>
+              </div>
+              <div class="row">
+                <label>
+                  Quantidade
+                  <input type="number" name="qty" min="1" value="1" />
+                </label>
+                <div style="display:flex;align-items:flex-end"><button type="button" class="btn btn-primary add-btn">Adicionar ao pedido</button></div>
+              </div>
+            </form>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================
+       DEPOIMENTOS / PROVAS SOCIAIS
+       ===================================== -->
+  <section>
+    <div class="container">
+      <h2 class="section-title">Depoimentos</h2>
+      <div class="quotes grid grid-3">
+        <blockquote class="card quote">
+          <div class="stars">★★★★★</div>
+          <p>“Depois do site, dobramos os pedidos no WhatsApp. Simples de usar e lindíssimo!”</p>
+          <div class="muted">— <strong>Marina</strong>, Doces da Ma</div>
+        </blockquote>
+        <blockquote class="card quote">
+          <div class="stars">★★★★★</div>
+          <p>“Os clientes escolhem tamanho e cor, e o pedido chega completo no Whats. Prático demais.”</p>
+          <div class="muted">— <strong>Anderson</strong>, Camisetas Sul</div>
+        </blockquote>
+        <blockquote class="card quote">
+          <div class="stars">★★★★★</div>
+          <p>“A opção de entrega combinada agilizou muito nossa operação.”</p>
+          <div class="muted">— <strong>João</strong>, Lanchonete do Bairro</div>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================
+       DRAWER: PEDIDO
+       ===================================== -->
+  <button class="btn btn-primary drawer-toggle" id="floatCartBtn">🛒 Pedido (0)</button>
+
+  <aside class="drawer" id="drawer">
+    <header>
+      <div class="container" style="display:flex;align-items:center;justify-content:space-between">
+        <strong>Seu Pedido</strong>
+        <button class="btn btn-ghost" id="closeDrawer">Fechar</button>
+      </div>
+    </header>
+    <main>
+      <div class="container">
+        <div id="cartList"></div>
+        <div id="cartEmpty" class="cart-empty">Seu pedido está vazio. Adicione itens pelo catálogo.</div>
+        <div id="totals" style="margin-top:16px;display:none">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="muted">Subtotal</span>
+            <strong id="subtotal">R$ 0,00</strong>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:18px 0"/>
+
+        <form id="checkoutForm" style="display:grid;gap:12px">
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <label class="badge"><input type="radio" name="modo" value="Entrega" checked> Entrega</label>
+            <label class="badge"><input type="radio" name="modo" value="Retirada"> Retirada</label>
+          </div>
+
+          <div id="entregaBox" class="card" style="padding:12px;display:grid;gap:10px">
+            <label>Nome <input type="text" name="nome" placeholder="Seu nome" required></label>
+            <label>Endereço <input type="text" name="endereco" placeholder="Rua, número, bairro"></label>
+            <label>Referência <input type="text" name="ref" placeholder="Perto de... (opcional)"></label>
+          </div>
+
+          <div id="retiradaBox" class="card" style="padding:12px;display:none;gap:10px">
+            <label>Nome <input type="text" name="nomeRetirada" placeholder="Seu nome"></label>
+            <label>Preferência de horário <input type="text" name="horario" placeholder="Ex: Hoje às 16h"></label>
+          </div>
+        </form>
+      </div>
+    </main>
+    <footer>
+      <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div>
+          <div class="muted" style="font-size:.85rem">Combinaremos detalhes pelo WhatsApp. Sem pagamento online.</div>
+        </div>
+        <button id="finishBtn" class="btn btn-primary" disabled>Finalizar no WhatsApp</button>
+      </div>
+    </footer>
+  </aside>
+
+  <!-- =====================================
+       FOOTER
+       ===================================== -->
+  <footer class="site">
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div class="muted">© <span id="year"></span> Seu Negócio — Demonstração</div>
+      <div class="muted">Feito com ❤ pela <strong>VisioWeb</strong></div>
+    </div>
+  </footer>
+
+  <!-- =====================================
+       SCRIPT
+       ===================================== -->
+  <script>
+    // ==============================
+    // ⚙️ CONFIGURAÇÕES RÁPIDAS
+    // ==============================
+    // 1) Coloque aqui o número do WhatsApp (somente dígitos com DDI+DDD). Exemplo: Brasil (55) + DDD 11 + número.
+    const WHATSAPP_NUMBER = "5599999999999"; // <- ALTERE AQUI
+
+    // 2) Mensagem inicial para o botão "Falar no WhatsApp" na hero
+    const WHATSAPP_HELLO = "Olá! Tenho interesse nos seus produtos. Pode me ajudar?";
+
+    // ==============================
+    // Utilidades
+    // ==============================
+    const fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+    // ==============================
+    // Tema claro/escuro
+    // ==============================
+    const themeBtn = $('#themeBtn');
+    const setTheme = (t)=> document.documentElement.setAttribute('data-theme', t);
+    themeBtn.addEventListener('click', ()=>{
+      const cur = document.documentElement.getAttribute('data-theme');
+      setTheme(cur === 'dark' ? 'light' : 'dark');
+    });
+
+    // ==============================
+    // Hero WhatsApp CTA
+    // ==============================
+    $('#ctaWhats').addEventListener('click', ()=>{
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_HELLO)}`;
+      window.open(url, '_blank');
+    });
+
+    // ==============================
+    // Catálogo: cálculo de preço por variações
+    // ==============================
+    function computePriceForCard(card){
+      let base = parseFloat(card.dataset.basePrice || '0');
+      let price = base;
+      const selects = $$('select', card);
+      selects.forEach(sel=>{
+        const opt = sel.selectedOptions[0];
+        if(opt?.dataset.price){ // substitui preço (ex.: capacidade/sabor)
+          price = parseFloat(opt.dataset.price);
+        }
+        if(opt?.dataset.add){ // adiciona valor (ex.: tamanho M/G)
+          price += parseFloat(opt.dataset.add);
+        }
+      });
+      return price;
+    }
+
+    function updateCardPrice(card){
+      const price = computePriceForCard(card);
+      const el = $('[data-price]', card);
+      el.textContent = fmt.format(price);
+    }
+
+    $$('.product').forEach(card=>{
+      // Atualiza ao carregar
+      updateCardPrice(card);
+      // Escuta mudanças
+      $$('select', card).forEach(sel=> sel.addEventListener('change', ()=> updateCardPrice(card)));
+      // Botão adicionar
+      $('.add-btn', card).addEventListener('click', ()=>{
+        const name = $('h3', card).textContent.trim();
+        const qty = parseInt($('input[name="qty"]', card)?.value || '1', 10);
+        const selects = $$('select', card);
+        const fields = $$('input[type="text"], textarea', card);
+        const variants = [];
+        selects.forEach(s=> variants.push(`${s.previousSibling?.textContent?.trim() || s.name}: ${s.value}`));
+        fields.forEach(f=>{ if(f.value) variants.push(`${f.previousSibling?.textContent?.trim() || f.name}: ${f.value}`) });
+        const price = computePriceForCard(card);
+        addToCart({ name, price, qty, variants });
+      });
+    });
+
+    // ==============================
+    // Carrinho/Pedido
+    // ==============================
+    const drawer = $('#drawer');
+    const openCartBtn = $('#openCartBtn');
+    const floatCartBtn = $('#floatCartBtn');
+    const closeDrawerBtn = $('#closeDrawer');
+
+    openCartBtn.addEventListener('click', ()=> drawer.classList.add('open'));
+    floatCartBtn.addEventListener('click', ()=> drawer.classList.add('open'));
+    closeDrawerBtn.addEventListener('click', ()=> drawer.classList.remove('open'));
+
+    const state = { items: [] };
+
+    function syncCartButtons(){
+      const count = state.items.reduce((a,i)=> a + i.qty, 0);
+      const label = `Pedido (${count})`;
+      openCartBtn.textContent = label;
+      floatCartBtn.textContent = `🛒 ${label}`;
+      $('#finishBtn').disabled = state.items.length === 0;
+    }
+
+    function renderCart(){
+      const list = $('#cartList');
+      list.innerHTML = '';
+      if(state.items.length === 0){
+        $('#cartEmpty').style.display = 'block';
+        $('#totals').style.display = 'none';
+        return;
+      }
+      $('#cartEmpty').style.display = 'none';
+      $('#totals').style.display = 'block';
+
+      let subtotal = 0;
+      state.items.forEach((it, idx)=>{
+        const line = document.createElement('div');
+        line.className = 'cart-item';
+        const left = document.createElement('div');
+        left.innerHTML = `<strong>${it.name}</strong><div class="meta">${it.variants.join(' · ') || ''}</div><div class="muted">Qtd: ${it.qty}</div>`;
+        const right = document.createElement('div');
+        right.style.textAlign = 'right';
+        right.innerHTML = `<div><strong>${fmt.format(it.price * it.qty)}</strong></div>`;
+        const rem = document.createElement('button');
+        rem.className = 'btn btn-ghost';
+        rem.textContent = 'Remover';
+        rem.addEventListener('click', ()=> removeFromCart(idx));
+        right.appendChild(rem);
+        line.appendChild(left); line.appendChild(right);
+        list.appendChild(line);
+        subtotal += it.price * it.qty;
+      });
+      $('#subtotal').textContent = fmt.format(subtotal);
+    }
+
+    function addToCart(item){
+      state.items.push(item);
+      syncCartButtons();
+      renderCart();
+      drawer.classList.add('open');
+    }
+    function removeFromCart(idx){
+      state.items.splice(idx,1);
+      syncCartButtons();
+      renderCart();
+    }
+
+    // ==============================
+    // Checkout (Entrega x Retirada)
+    // ==============================
+    const checkoutForm = $('#checkoutForm');
+    const entregaBox = $('#entregaBox');
+    const retiradaBox = $('#retiradaBox');
+
+    checkoutForm.addEventListener('change', ()=>{
+      const modo = new FormData(checkoutForm).get('modo');
+      const entrega = modo === 'Entrega';
+      entregaBox.style.display = entrega ? 'grid' : 'none';
+      retiradaBox.style.display = entrega ? 'none' : 'grid';
+    });
+
+    // Finalizar no WhatsApp
+    $('#finishBtn').addEventListener('click', ()=>{
+      if(state.items.length === 0) return;
+      const fd = new FormData(checkoutForm);
+      const modo = fd.get('modo');
+      const nome = (fd.get('nome') || fd.get('nomeRetirada') || '').toString().trim();
+      if(!nome){
+        alert('Informe seu nome para continuar.');
+        return;
+      }
+
+      // Monta o texto do pedido
+      let text = `*Novo pedido — ${modo}*%0A`;
+      text += `%0A`;
+      state.items.forEach((it, i)=>{
+        text += `*${i+1}. ${it.name}* — ${fmt.format(it.price)} x ${it.qty}%0A`;
+        if(it.variants.length) text += `(${it.variants.join(' · ')})%0A`;
+        text += `%0A`;
+      });
+      const subtotal = state.items.reduce((s,i)=> s + i.price*i.qty, 0);
+      text += `*Subtotal:* ${fmt.format(subtotal)}%0A`;
+      text += `%0A`;
+      if(modo === 'Entrega'){
+        const endereco = (fd.get('endereco')||'').toString();
+        const ref = (fd.get('ref')||'').toString();
+        text += `*Cliente:* ${nome}%0A*Endereço:* ${endereco}%0A`;
+        if(ref) text += `*Referência:* ${ref}%0A`;
+      } else {
+        const horario = (fd.get('horario')||'').toString();
+        text += `*Cliente:* ${nome}%0A`;
+        if(horario) text += `*Retirada:* ${horario}%0A`;
+      }
+      text += `%0AObrigado!`;
+
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
+      window.open(url, '_blank');
+    });
+
+    // ==============================
+    // Inicializações
+    // ==============================
+    document.addEventListener('DOMContentLoaded', ()=>{
+      $('#year').textContent = new Date().getFullYear();
+      syncCartButtons();
+      renderCart();
+    });
+  </script>
+
+  <!-- =====================================
+       NOTAS DE MANUTENÇÃO (comentários)
+       =====================================
+    1) Trocar número do WhatsApp:
+       - Edite a constante WHATSAPP_NUMBER no topo do <script> (somente dígitos). Exemplos:
+         55 51 99999-9999 => "5551999999999"
+
+    2) Alterar produtos/variações/preços:
+       - Cada <article class="product"> possui data-base-price com o preço base.
+       - Em <select>, use:
+         * data-price  → define o preço final daquela opção (ex.: sabor/capacidade)
+         * data-add    → adiciona valor ao preço base (ex.: tamanho M/G)
+       - O preço mostrado atualiza automaticamente ao trocar as opções.
+
+    3) Texto padrão do botão “Falar no WhatsApp” (hero):
+       - Edite a constante WHATSAPP_HELLO.
+
+    4) Entrega x Retirada:
+       - O cliente escolhe o modo no carrinho. Os campos visíveis mudam conforme a escolha.
+
+    5) Estilo/cores/tema:
+       - O tema usa CSS custom properties. Você pode ajustar as variáveis em :root e [data-theme="light"].
+       - Botão “Tema” alterna entre claro/escuro.
+
+    6) Incorporação na sua landing page:
+       - Salve este arquivo como index.html dentro de /projetos/pequeno-comercio/ e linke na landing:
+         <a href="projetos/pequeno-comercio/index.html" target="_blank">Ver demo</a>
+
+    7) Ícones/imagens:
+       - Os quadrinhos dos produtos usam um placeholder (.thumb). Substitua por <img src="..."> se desejar.
+  -->
+</body>
+</html>
