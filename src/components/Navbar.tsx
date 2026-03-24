@@ -1,6 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { NautaLogoFull } from "./NautaLogo";
 
 const links = [
   { label: "Serviços", href: "#servicos" },
@@ -15,34 +16,13 @@ const WA_URL =
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
-    <nav
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "glass border-b border-white/10 shadow-lg shadow-black/30"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-18 py-4">
+    <nav className="relative z-20 border-b border-white/[0.06]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between py-4">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-600 to-purple-400 flex items-center justify-center glow-purple shadow-lg">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L20 7V12C20 16.4 16.4 20.4 12 22C7.6 20.4 4 16.4 4 12V7L12 2Z" fill="white" fillOpacity="0.9"/>
-              <path d="M9 12L11 14L15 10" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <span className="text-lg font-bold tracking-tight text-white">
-            Nauta<span className="text-gradient">Web</span>
-          </span>
+        <a href="#" aria-label="NautaWeb — início">
+          <NautaLogoFull />
         </a>
 
         {/* Desktop links */}
@@ -51,7 +31,7 @@ export default function Navbar() {
             <a
               key={l.href}
               href={l.href}
-              className="text-sm text-white/70 hover:text-white transition-colors duration-200 font-medium"
+              className="text-sm text-white/60 hover:text-white transition-colors duration-200 font-medium"
             >
               {l.label}
             </a>
@@ -72,9 +52,9 @@ export default function Navbar() {
 
         {/* Mobile toggle */}
         <button
-          className="md:hidden text-white/70 hover:text-white"
+          className="md:hidden text-white/60 hover:text-white transition-colors"
           onClick={() => setOpen(!open)}
-          aria-label="Menu"
+          aria-label="Abrir menu"
         >
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -82,13 +62,13 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden glass border-t border-white/10 px-6 py-5 space-y-4">
+        <div className="md:hidden border-t border-white/[0.06] bg-black/60 backdrop-blur-xl px-6 py-5 space-y-4">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
               onClick={() => setOpen(false)}
-              className="block text-white/70 hover:text-white text-sm font-medium"
+              className="block text-white/60 hover:text-white text-sm font-medium transition-colors"
             >
               {l.label}
             </a>

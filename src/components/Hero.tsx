@@ -14,7 +14,7 @@ const stats = [
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-20">
+    <section className="relative min-h-[92vh] flex flex-col justify-center overflow-hidden">
       {/* Background grid */}
       <div className="absolute inset-0 hero-grid opacity-60" />
 
